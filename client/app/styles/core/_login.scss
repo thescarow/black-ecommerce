@@ -6,6 +6,9 @@
 }
 
 .signup-provider {
+  
+  background-color: $fourth-color;
+  border-radius: 8px;
   @include flex();
   flex-direction: column;
   justify-content: center;
@@ -25,8 +28,20 @@
   padding: 12px 20px;
   width: 300px;
   max-width: 350px;
-  border: $border-primary;
+  // border: $border-primary;
+  border: 1px solid $third-color;
   border-radius: $border-radius-default;
+  span{
+    color: $second-color !important;
+   
+  }
+  &:hover{
+    background-color: $second-color;
+    span{
+      color: $fourth-color !important;
+    }
+  }
+
   @include media-breakpoint-down(sm) {
     width: 100%;
     max-width: unset;

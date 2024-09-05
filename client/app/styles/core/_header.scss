@@ -1,11 +1,14 @@
 // header styles
 .header-info {
   padding: 10px 0px;
-  background-color: $theme-light-black;
+  // background-color: $theme-light-black;
+  background-color: $fourth-color;
+  border-bottom: 1px solid $second-color;
+  
 
   .fa,
   span {
-    color: $white;
+    color: $first-color;
     font-size: $font-size-medium !important;
     font-weight: $font-weight-normal;
     margin: 0px 5px;
@@ -13,8 +16,11 @@
 }
 
 .header {
-  background-color: $white;
-  border-bottom: $border-primary;
+  // background-color: $white;
+  background-color: $second-color;
+  // border-bottom: $border-primary;
+  border-bottom: 1px solid $third-color;
+  color: $fourth-color;
 
   .logo {
     font-size: $font-size-heading-large !important;
@@ -46,7 +52,8 @@
 
   .bars-icon {
     &:hover {
-      opacity: 0.5;
+      // opacity: 0.5;
+      color: $fourth-color !important;
     }
   }
 
@@ -55,13 +62,20 @@
     line-height: 100%;
 
     &:hover {
-      opacity: 0.5;
+      // opacity: 0.5;
+      color: $fourth-color !important;
+
+    }
+    &:hover .bag-icon{
+      fill: $fourth-color !important;
+      stroke: $fourth-color !important;
     }
   }
 
   .fa {
     cursor: pointer;
-    color: $theme-dark-gray;
+    // color: $theme-dark-gray;
+    color: $first-color;
     font-size: $font-size-x-huge !important;
   }
 
@@ -73,7 +87,9 @@
   }
 
   .navbar {
-    background-color: $white !important;
+    // background-color: $white !important;
+    // background-color: #1E201E !important;
+    background-color: $second-color !important;
     justify-content: flex-end;
     padding: 0;
 
@@ -84,9 +100,17 @@
     }
 
     .cart-icon {
+    
+      
+    
       .bag-icon {
         vertical-align: text-bottom;
+        fill: $third-color;
+        stroke: $third-color;
       }
+    
+    
+      
     }
   }
 
@@ -99,16 +123,19 @@
     .nav-link {
       padding-top: 0;
       padding-bottom: 0;
-
+      color: $third-color !important;
       &.active {
-        color: $font-hover-color !important;
+        // color: $font-hover-color !important;
+        color: $fourth-color !important;
       }
     }
 
     a,
     span {
+      color: $third-color !important;
       &:hover {
-        color: $font-hover-color !important;
+        // color: $font-hover-color !important; 
+        color: $fourth-color !important;
       }
     }
 
@@ -117,6 +144,19 @@
     }
 
     .dropdown-menu {
+      background-color: $second-color;
+      color: $third-color !important;
+      box-shadow: 0 0 10px $third-color;
+ 
+      &.dropdown-menu-right button{
+        background-color: $second-color;
+        color: $third-color !important;
+        &:hover{
+          background-color: $third-color;
+          color: $second-color !important;
+        }
+    }
+      
       &.nav-brand-dropdown {
         padding: 0;
         @include media-breakpoint-down(sm) {
@@ -143,9 +183,13 @@
       justify-content: center;
     }
 
+    .input-btn .btn-icon span{
+      color: $third-color !important;
+    }
     .logo {
       margin: 0px;
-      color: $font-custom-color !important;
+      // color: $font-custom-color !important;
+      color: $fourth-color !important;
       @include media-breakpoint-up(md) {
         margin-left: 15px;
       }
@@ -162,8 +206,10 @@
     text-align: center;
     width: 20px;
     height: 20px;
-    background-color: $primary-bg;
-    color: $white;
+    // background-color: $primary-bg;
+    background-color: $fourth-color;
+    // color: $white;
+    color: $first-color;
     @include flex();
     justify-content: center;
     align-items: center;
@@ -178,13 +224,24 @@
 
 // mini brand
 .mini-brand {
+  background-color: $second-color;
+  
   min-width: 270px;
   @include media-breakpoint-up(md) {
     min-width: 500px;
   }
 
   .min-brand-title {
-    border-bottom: $border-primary;
+    h3{
+      color: $fourth-color !important;
+    }
+    a{
+      text-decoration: underline !important;
+      text-underline-offset: 4px;
+      text-decoration-color: $third-color !important;  
+    }
+    // border-bottom: $border-primary;
+    border-bottom: 1px solid $third-color;
     padding-bottom: 8px;
     margin-bottom: 16px;
   }
@@ -211,12 +268,14 @@
 
       .brand-link {
         position: relative;
-        color: $font-custom-color !important;
+        // color: $font-custom-color !important;
+        color: $third-color !important; 
         font-size: $font-size-large;
         font-weight: $font-weight-normal;
 
         &:hover {
           &:after {
+            color: $fourth-color !important;
             opacity: 1;
             -webkit-transform: translateY(2px);
             -moz-transform: translateY(2px);
@@ -230,7 +289,8 @@
           left: 0;
           width: 100%;
           height: 2px;
-          background-color: $primary-bg;
+          // background-color: $primary-bg;
+          background-color: $third-color;
           content: '';
           opacity: 0;
           -webkit-transition: opacity $layout-transition-speed,

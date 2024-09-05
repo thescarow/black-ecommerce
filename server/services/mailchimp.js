@@ -1,28 +1,28 @@
-const Mailchimp = require('mailchimp-api-v3');
+const Mailchimp = require('mailchimp-api-v3')
 
-const keys = require('../config/keys');
+const keys = require('../config/keys')
 
-const { key, listKey } = keys.mailchimp;
+const { key, listKey } = keys.mailchimp
 
 class MailchimpService {
   init() {
     try {
-      return new Mailchimp(key);
+      return new Mailchimp(key)
     } catch (error) {
-      console.warn('Missing mailgun keys');
+      console.warn('Missing mailchimp keys')
     }
   }
 }
 
-const mailchimp = new MailchimpService().init();
+const mailchimp = new MailchimpService().init()
 
 exports.subscribeToNewsletter = async email => {
   try {
     return await mailchimp.post(`lists/${listKey}/members`, {
       email_address: email,
       status: 'subscribed'
-    });
+    })
   } catch (error) {
-    return error;
+    return error
   }
-};
+}

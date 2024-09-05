@@ -4,10 +4,10 @@
  *
  */
 
-import React from 'react';
+import React from 'react'
 
-import Tooltip from '../Tooltip';
-import Popover from '../Popover';
+import Tooltip from '../Tooltip'
+import Popover from '../Popover'
 
 const variants = {
   primary: 'custom-btn-primary',
@@ -17,7 +17,7 @@ const variants = {
   dark: 'custom-btn-dark',
   none: 'custom-btn-none',
   empty: ''
-};
+}
 
 const Button = props => {
   const {
@@ -43,26 +43,26 @@ const Button = props => {
     popover,
     popoverContent,
     popoverTitle
-  } = props;
+  } = props
 
-  const v = variant ? variants[variant] : '';
+  const v = variant ? variants[variant] : ''
 
-  const btnVariant = v;
+  const btnVariant = v
 
   const btn =
-    icon && text ? 'with-icon' : icon && !text ? 'icon-only' : 'text-only';
+    icon && text ? 'with-icon' : icon && !text ? 'icon-only' : 'text-only'
 
   const classNames = `input-btn${`${className && ` ${className}`}`}${
     btnVariant && ` ${btnVariant}`
   }${` ${size}`} ${btn} ${
     iconDirection === 'left' ? 'icon-left' : 'icon-right'
-  } ${borderless ? 'border-0' : ''}`;
+  } ${borderless ? 'border-0' : ''}`
 
-  const iconClassNames = `btn-icon${`${iconClassName && ` ${iconClassName}`}`}`;
+  const iconClassNames = `btn-icon${`${iconClassName && ` ${iconClassName}`}`}`
 
-  const tooltipId = tooltip ? `tooltip-${id}` : id;
-  const popoverId = popover ? `popover-${id}` : id;
-  const btnId = tooltip ? tooltipId : popoverId;
+  const tooltipId = tooltip ? `tooltip-${id}` : id
+  const popoverId = popover ? `popover-${id}` : id
+  const btnId = tooltip ? tooltipId : popoverId
 
   return (
     <button
@@ -77,8 +77,7 @@ const Button = props => {
       onClick={onClick}
       style={{
         borderRadius: round
-      }}
-    >
+      }}>
       {tooltip && <Tooltip target={tooltipId}>{tooltipContent}</Tooltip>}
       {popover && (
         <Popover target={popoverId} popoverTitle={popoverTitle}>
@@ -97,8 +96,8 @@ const Button = props => {
         </>
       )}
     </button>
-  );
-};
+  )
+}
 
 Button.defaultProps = {
   type: 'button',
@@ -111,6 +110,6 @@ Button.defaultProps = {
   round: 3,
   tooltip: false,
   popover: false
-};
+}
 
-export default Button;
+export default Button

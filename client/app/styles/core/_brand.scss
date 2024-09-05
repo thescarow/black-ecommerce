@@ -1,9 +1,11 @@
 .brand-dashboard {
   .b-list {
+    
     .brand-box {
       height: 100%;
       border-radius: $border-radius-default;
-      box-shadow: $box-shadow-secondary;
+      // box-shadow: $box-shadow-secondary;
+      box-shadow: 0 0 10px 0 $third-color;
       @include transition();
 
       &:hover {
@@ -19,10 +21,12 @@
 }
 
 .brand-list {
+  
   .brand-box {
     height: 100%;
     padding: 10px;
-    border: $border-default;
+    // border: $border-default;
+    border: 1px solid $third-color;
     border-radius: $border-radius-default;
     @include transition();
 

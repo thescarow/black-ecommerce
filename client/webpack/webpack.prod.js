@@ -1,18 +1,18 @@
-require('dotenv').config();
-const webpack = require('webpack');
-const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const webpackMerge = require('webpack-merge');
+require('dotenv').config()
+const webpack = require('webpack')
+const path = require('path')
+const TerserPlugin = require('terser-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const WebpackPwaManifest = require('webpack-pwa-manifest')
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const webpackMerge = require('webpack-merge')
 
-const common = require('./webpack.common');
+const common = require('./webpack.common')
 
-const CURRENT_WORKING_DIR = process.cwd();
-const NODE_ENV = process.env.NODE_ENV;
-const API_URL = process.env.API_URL;
+const CURRENT_WORKING_DIR = process.cwd()
+const NODE_ENV = process.env.NODE_ENV
+const API_URL = process.env.API_URL
 
 const config = {
   mode: 'production',
@@ -139,9 +139,9 @@ const config = {
       filename: 'css/[name].[hash].css'
     }),
     new WebpackPwaManifest({
-      name: 'MERN Store',
-      short_name: 'MERNStore',
-      description: 'MERN Store!',
+      name: 'Black Store',
+      short_name: 'BlackStore',
+      description: 'Black Store!',
       background_color: '#fff',
       theme_color: '#4a68aa',
       inject: true,
@@ -169,6 +169,6 @@ const config = {
       canPrint: true
     })
   ]
-};
+}
 
-module.exports = webpackMerge(common, config);
+module.exports = webpackMerge(common, config)

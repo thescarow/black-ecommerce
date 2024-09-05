@@ -4,20 +4,20 @@
  *
  */
 
-import React from 'react';
+import React from 'react'
 
-import { Link } from 'react-router-dom';
-import { Row, Col, DropdownItem } from 'reactstrap';
+import { Link } from 'react-router-dom'
+import { Row, Col, DropdownItem } from 'reactstrap'
 
-import { ROLES, CART_ITEM_STATUS } from '../../../constants';
-import Button from '../../Common/Button';
-import DropdownConfirm from '../../Common/DropdownConfirm';
+import { ROLES, CART_ITEM_STATUS } from '../../../constants'
+import Button from '../../Common/Button'
+import DropdownConfirm from '../../Common/DropdownConfirm'
 
 const OrderItems = props => {
-  const { order, user, updateOrderItemStatus } = props;
+  const { order, user, updateOrderItemStatus } = props
 
   const renderPopoverContent = item => {
-    const statuses = Object.values(CART_ITEM_STATUS);
+    const statuses = Object.values(CART_ITEM_STATUS)
 
     return (
       <div className='d-flex flex-column align-items-center justify-content-center'>
@@ -25,28 +25,26 @@ const OrderItems = props => {
           <DropdownItem
             key={`${s}-${i}`}
             className={s === item?.status ? 'active' : ''}
-            onClick={() => updateOrderItemStatus(item._id, s)}
-          >
+            onClick={() => updateOrderItemStatus(item._id, s)}>
             {s}
           </DropdownItem>
         ))}
       </div>
-    );
-  };
+    )
+  }
 
   const renderItemsAction = item => {
-    const isAdmin = user.role === ROLES.Admin;
+    const isAdmin = user.role === ROLES.Admin
 
     if (item.status === CART_ITEM_STATUS.Delivered) {
       return (
         <Link
           to={`/product/${item.product.slug}`}
           className='btn-link text-center py-2 fs-12'
-          style={{ minWidth: 120 }}
-        >
-          Reivew Product
+          style={{ minWidth: 120 }}>
+          Review Product
         </Link>
-      );
+      )
     } else if (item.status !== 'Cancelled') {
       if (!isAdmin) {
         return (
@@ -64,19 +62,18 @@ const OrderItems = props => {
               />
             </div>
           </DropdownConfirm>
-        );
+        )
       } else {
         return (
           <DropdownConfirm
             label={item.product && item.status}
-            className={isAdmin ? 'admin' : ''}
-          >
+            className={isAdmin ? 'admin' : ''}>
             {renderPopoverContent(item)}
           </DropdownConfirm>
-        );
+        )
       }
     }
-  };
+  }
 
   return (
     <div className='order-items pt-3'>
@@ -101,8 +98,7 @@ const OrderItems = props => {
                         <>
                           <Link
                             to={`/product/${item.product?.slug}`}
-                            className='item-link'
-                          >
+                            className='item-link'>
                             <h4 className='d-block item-name one-line-ellipsis'>
                               {item.product?.name}
                             </h4>
@@ -162,7 +158,7 @@ const OrderItems = props => {
         ))}
       </Row>
     </div>
-  );
-};
+  )
+}
 
-export default OrderItems;
+export default OrderItems
