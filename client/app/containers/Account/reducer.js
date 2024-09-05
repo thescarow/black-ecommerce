@@ -9,7 +9,7 @@ import {
   FETCH_PROFILE,
   CLEAR_ACCOUNT,
   SET_PROFILE_LOADING
-} from './constants';
+} from './constants'
 
 const initialState = {
   user: {
@@ -19,7 +19,7 @@ const initialState = {
     role: ''
   },
   isLoading: false
-};
+}
 
 const accountReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -30,7 +30,7 @@ const accountReducer = (state = initialState, action) => {
           ...state.user,
           ...action.payload
         }
-      };
+      }
     case FETCH_PROFILE:
       return {
         ...state,
@@ -38,7 +38,7 @@ const accountReducer = (state = initialState, action) => {
           ...state.user,
           ...action.payload
         }
-      };
+      }
     case CLEAR_ACCOUNT:
       return {
         ...state,
@@ -46,15 +46,15 @@ const accountReducer = (state = initialState, action) => {
           firstName: '',
           lastName: ''
         }
-      };
+      }
     case SET_PROFILE_LOADING:
       return {
         ...state,
         isLoading: action.payload
-      };
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default accountReducer;
+export default accountReducer

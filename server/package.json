@@ -1,14 +1,13 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "MERN Ecommerce Server",
+  "description": "Black Ecommerce Server",
   "scripts": {
     "dev": "nodemon",
     "start": "cross-env NODE_ENV=production node index.js",
     "seed:db": "node utils/seed.js"
   },
   "dependencies": {
-    "@faker-js/faker": "^8.4.1",
     "aws-sdk": "^2.799.0",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",

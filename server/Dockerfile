@@ -16,5 +16,5 @@ COPY . .
 # Expose port 3000 for the server
 EXPOSE 3000
 
-# Default command to start the application
-CMD ["npm", "start"]
+# Start the server
+CMD [ "npm", "start" ]

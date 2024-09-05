@@ -4,7 +4,7 @@
   position: fixed;
   top: 0;
   right: -100%;
-  background-color: $white;
+  background-color: $fourth-color;
   height: 100%;
   width: 470px;
   z-index: 1000;
@@ -45,20 +45,36 @@
     overflow-y: auto;
     overflow-x: hidden;
     max-height: 100%;
-    background-color: $white;
+    background-color: $fourth-color;
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $third-color;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    scrollbar-color: $third-color transparent;
+    scrollbar-width: thin;
   }
 
   .item-box {
     padding: 10px;
     margin-bottom: 5px;
-    border-bottom: $border-default;
+    border-bottom: 1px solid #eee;
 
     &:last-child {
       border-bottom: none;
     }
 
     .value {
-      color: $font-custom-color;
+      // color: $font-custom-color;
+      color: $second-color;
       font-weight: $font-weight-normal;
       font-size: $font-size-xx-large;
     }
@@ -72,7 +88,8 @@
       }
 
       .icon-trash {
-        color: $font-custom-color;
+        // color: $font-custom-color;
+        color: $second-color;
         font-size: $font-size-xx-large;
         cursor: pointer;
       }
@@ -84,7 +101,8 @@
   }
 
   .cart-header {
-    border-bottom: $border-default;
+    // border-bottom: $border-default;
+    border-bottom: 1px solid $third-color;
     text-align: right;
     padding-right: 5px;
     align-items: center;
@@ -112,12 +130,13 @@
   }
 
   .cart-checkout {
-    background-color: $white;
+    background-color: $fourth-color;
     border-top: $border-default;
 
     .cart-summary {
       padding: 10px;
-      background-color: $theme-white;
+      // background-color: $theme-white;
+      background-color: $fourth-color;
 
       p {
         margin-bottom: 0;
@@ -128,6 +147,7 @@
 
 /* start cart common styles */
 .summary-item {
+  background-color: $fourth-color;
   .summary-label {
     color: $font-custom-color;
     font-weight: $font-weight-normal;

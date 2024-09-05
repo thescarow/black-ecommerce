@@ -4,15 +4,15 @@
  *
  */
 
-import React from 'react';
+import React from 'react'
 
-import { Link } from 'react-router-dom';
-import { Row, Col } from 'reactstrap';
+import { Link } from 'react-router-dom'
+import { Row, Col } from 'reactstrap'
 
-import Input from '../../Common/Input';
-import Button from '../../Common/Button';
-import SelectOption from '../../Common/SelectOption';
-import Switch from '../../Common/Switch';
+import Input from '../../Common/Input'
+import Button from '../../Common/Button'
+import SelectOption from '../../Common/SelectOption'
+import Switch from '../../Common/Switch'
 
 const EditCategory = props => {
   const {
@@ -23,12 +23,12 @@ const EditCategory = props => {
     updateCategory,
     deleteCategory,
     activateCategory
-  } = props;
+  } = props
 
   const handleSubmit = event => {
-    event.preventDefault();
-    updateCategory();
-  };
+    event.preventDefault()
+    updateCategory()
+  }
 
   return (
     <div className='edit-category'>
@@ -49,7 +49,7 @@ const EditCategory = props => {
               placeholder={'Category Name'}
               value={category.name}
               onInputChange={(name, value) => {
-                categoryChange(name, value);
+                categoryChange(name, value)
               }}
             />
           </Col>
@@ -62,7 +62,7 @@ const EditCategory = props => {
               placeholder={'Category Slug'}
               value={category.slug}
               onInputChange={(name, value) => {
-                categoryChange(name, value);
+                categoryChange(name, value)
               }}
             />
           </Col>
@@ -75,7 +75,7 @@ const EditCategory = props => {
               placeholder={'Category Description'}
               value={category.description}
               onInputChange={(name, value) => {
-                categoryChange(name, value);
+                categoryChange(name, value)
               }}
             />
           </Col>
@@ -87,7 +87,7 @@ const EditCategory = props => {
               defaultValue={category.products}
               options={products}
               handleSelectChange={value => {
-                categoryChange('products', value);
+                categoryChange('products', value)
               }}
             />
           </Col>
@@ -121,7 +121,7 @@ const EditCategory = props => {
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default EditCategory;
+export default EditCategory

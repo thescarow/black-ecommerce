@@ -4,16 +4,16 @@
  *
  */
 
-import React from 'react';
-import { connect } from 'react-redux';
+import React from 'react'
+import { connect } from 'react-redux'
 
-import { Row, Col } from 'reactstrap';
-import { Redirect, Link } from 'react-router-dom';
+import { Row, Col } from 'reactstrap'
+import { Redirect, Link } from 'react-router-dom'
 
-import actions from '../../actions';
+import actions from '../../actions'
 
-import Input from '../../components/Common/Input';
-import Button from '../../components/Common/Button';
+import Input from '../../components/Common/Input'
+import Button from '../../components/Common/Button'
 
 class ForgotPassword extends React.PureComponent {
   render() {
@@ -23,14 +23,14 @@ class ForgotPassword extends React.PureComponent {
       formErrors,
       forgotPasswordChange,
       forgotPassowrd
-    } = this.props;
+    } = this.props
 
-    if (authenticated) return <Redirect to='/dashboard' />;
+    if (authenticated) return <Redirect to='/dashboard' />
 
     const handleSubmit = event => {
-      event.preventDefault();
-      forgotPassowrd();
-    };
+      event.preventDefault()
+      forgotPassowrd()
+    }
 
     return (
       <div className='forgot-password-form'>
@@ -47,7 +47,7 @@ class ForgotPassword extends React.PureComponent {
                 placeholder={'Please Enter Your Email'}
                 value={forgotFormData.email}
                 onInputChange={(name, value) => {
-                  forgotPasswordChange(name, value);
+                  forgotPasswordChange(name, value)
                 }}
               />
             </Col>
@@ -66,7 +66,7 @@ class ForgotPassword extends React.PureComponent {
           </div>
         </form>
       </div>
-    );
+    )
   }
 }
 
@@ -75,7 +75,7 @@ const mapStateToProps = state => {
     authenticated: state.authentication.authenticated,
     forgotFormData: state.forgotPassword.forgotFormData,
     formErrors: state.forgotPassword.formErrors
-  };
-};
+  }
+}
 
-export default connect(mapStateToProps, actions)(ForgotPassword);
+export default connect(mapStateToProps, actions)(ForgotPassword)

@@ -1,6 +1,6 @@
 module.exports = {
   app: {
-    name: 'Mern Ecommerce',
+    name: 'Black Ecommerce',
     apiURL: `${process.env.BASE_API_URL}`,
     clientURL: process.env.CLIENT_URL
   },
@@ -37,4 +37,4 @@ module.exports = {
     region: process.env.AWS_REGION,
     bucketName: process.env.AWS_BUCKET_NAME
   }
-};
+}

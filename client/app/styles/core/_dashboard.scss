@@ -7,8 +7,11 @@
 }
 
 .panel-sidebar {
+  background-color: $fourth-color;
+  
   .panel-title,
   .menu-panel {
+   color: $second-color !important;
     margin: 0;
     padding: 10px 0px;
     text-align: center;
@@ -34,6 +37,8 @@
 
   .navbar {
     padding: 0px;
+    border: $border-primary;
+  border-radius: 8px;
   }
 
   .menu-panel {
@@ -58,11 +63,13 @@
     width: 100%;
     text-align: center;
     margin-bottom: 0;
+    background-color: $fourth-color;
 
     li {
-      border-top: $border-primary;
-      border-right: $border-primary;
-      border-left: $border-primary;
+      // border-top: $border-primary;
+      // border-right: $border-primary;
+      border-bottom: $border-primary;
+      color: $second-color !important;
 
       &:hover {
         a {
@@ -71,7 +78,7 @@
       }
 
       &:last-child {
-        border-bottom: $border-primary;
+        // border-bottom: $border-primary;
       }
 
       a {
@@ -83,7 +90,9 @@
 
         &.active-link {
           font-weight: $font-weight-medium;
-          background-color: $white;
+          // background-color: $white;
+          background-color: $second-color;
+          color: $fourth-color !important;
         }
       }
     }

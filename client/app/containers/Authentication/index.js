@@ -4,22 +4,22 @@
  *
  */
 
-import React from 'react';
+import React from 'react'
 
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 
-import actions from '../../actions';
+import actions from '../../actions'
 
 export default function (ComposedComponent) {
   class Authentication extends React.PureComponent {
     render() {
-      const { authenticated } = this.props;
+      const { authenticated } = this.props
 
       if (!authenticated) {
-        return <Redirect to='/login' />;
+        return <Redirect to='/login' />
       } else {
-        return <ComposedComponent {...this.props} />;
+        return <ComposedComponent {...this.props} />
       }
     }
   }
@@ -27,8 +27,8 @@ export default function (ComposedComponent) {
   const mapStateToProps = state => {
     return {
       authenticated: state.authentication.authenticated
-    };
-  };
+    }
+  }
 
-  return connect(mapStateToProps, actions)(Authentication);
+  return connect(mapStateToProps, actions)(Authentication)
 }

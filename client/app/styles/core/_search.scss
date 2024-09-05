@@ -1,13 +1,17 @@
 /* start autosuggest styles */
 .react-autosuggest__container {
   position: relative;
+  background-color: $second-color;
 
   .react-autosuggest__input {
     height: 40px;
     padding: 10px 20px;
-    border: $border-default;
+    // border: $border-default;
+    border: 1px solid $third-color;
     border-radius: 4px;
     -webkit-appearance: none;
+    background-color: $second-color;
+    color: $fourth-color !important ;
   }
 
   .react-autosuggest__input::-ms-clear {
@@ -32,7 +36,8 @@
     border-bottom-right-radius: 4px;
     z-index: 2;
     border: $border-default;
-    background-color: $white;
+    // background-color: $white;
+    background-color: $fourth-color;
   }
 
   .react-autosuggest__suggestions-list {
