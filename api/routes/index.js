@@ -7,100 +7,53 @@ const passport = require('passport')
 const Mongoose = require('mongoose')
 const multer = require('multer')
 
-const auth = require('../../middleware/auth')
-
+const auth = require('../middleware/auth')
+const role = require('../middleware/role')
+const store = require('../utils/store')
 // Bring in Models & Helpers
-const User = require('../../models/user')
-const mailchimp = require('../../services/mailchimp')
-const mailgun = require('../../services/mailgun')
-const keys = require('../../config/keys')
-const { EMAIL_PROVIDER, JWT_COOKIE } = require('../../constants')
+const mailchimp = require('../services/mailchimp')
+const mailgun = require('../services/mailgun')
+const keys = require('../config/keys')
+const {
+  EMAIL_PROVIDER,
+  JWT_COOKIE,
+  ROLES,
+  MERCHANT_STATUS,
+  CART_ITEM_STATUS,
+  REVIEW_STATUS
+} = require('../constants')
 
 const { secret, tokenLife } = keys.jwt
 // Bring in Models & Helpers
-const Address = require('../../models/address')
-const auth = require('../../middleware/auth')
-//////////////////////
-// Bring in Models & Utils
-const Brand = require('../../models/brand')
-const Product = require('../../models/product')
-const Merchant = require('../../models/merchant')
-const auth = require('../../middleware/auth')
-const role = require('../../middleware/role')
-const store = require('../../utils/store')
-const { ROLES, MERCHANT_STATUS } = require('../../constants')
-//////////////////////
-// Bring in Models & Utils
-const Cart = require('../../models/cart')
-const Product = require('../../models/product')
-const auth = require('../../middleware/auth')
-const store = require('../../utils/store')
-///////////////////////////////////////////////////
-// Bring in Models & Utils
-const Category = require('../../models/category')
-const auth = require('../../middleware/auth')
-const role = require('../../middleware/role')
-const store = require('../../utils/store')
-const { ROLES } = require('../../constants')
-/////////////////////////////////////////////////////////
-// Bring in Models & Helpers
-const Contact = require('../../models/contact')
-const mailgun = require('../../services/mailgun')
-/////////////////////////////////////////////////////////
-// Bring in Models & Helpers
-const { MERCHANT_STATUS, ROLES } = require('../../constants')
-const Merchant = require('../../models/merchant')
-const User = require('../../models/user')
-const Brand = require('../../models/brand')
-const auth = require('../../middleware/auth')
-const role = require('../../middleware/role')
-const mailgun = require('../../services/mailgun')
-/////////////////////////////////////////////////////////////
-// Bring in Models & Utils
-const Order = require('../../models/order')
-const Cart = require('../../models/cart')
-const Product = require('../../models/product')
-const auth = require('../../middleware/auth')
-const mailgun = require('../../services/mailgun')
-const store = require('../../utils/store')
-const { ROLES, CART_ITEM_STATUS } = require('../../constants')
-/////////////////////////////////////////////////////////////////
 
+//////////////////////
 // Bring in Models & Utils
-const Product = require('../../models/product')
-const Brand = require('../../models/brand')
-const Category = require('../../models/category')
-const auth = require('../../middleware/auth')
-const role = require('../../middleware/role')
-const checkAuth = require('../../utils/auth')
-const { s3Upload } = require('../../utils/storage')
+const User = require('../models/user')
+const Address = require('../models/address')
+const Brand = require('../models/brand')
+const Product = require('../models/product')
+const Merchant = require('../models/merchant')
+const Cart = require('../models/cart')
+const Category = require('../models/category')
+const Contact = require('../models/contact')
+const Order = require('../models/order')
+const Review = require('../models/review')
+const Wishlist = require('../models/wishlist')
+
+//////////////////////
+
+const checkAuth = require('../utils/auth')
+const { s3Upload } = require('../utils/storage')
 const {
   getStoreProductsQuery,
   getStoreProductsWishListQuery
-} = require('../../utils/queries')
-const { ROLES } = require('../../constants')
+} = require('../utils/queries')
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage })
 ////////////////////////////////////////////////////////
-
-// Bring in Models & Helpers
-const Review = require('../../models/review')
-const Product = require('../../models/product')
-const auth = require('../../middleware/auth')
-const { REVIEW_STATUS } = require('../../constants')
 ////////////////////////////////////////////////////////////
 
-// Bring in Models & Helpers
-const User = require('../../models/user')
-const auth = require('../../middleware/auth')
-const role = require('../../middleware/role')
-const { ROLES } = require('../../constants')
-///////////////////////////////////////////////////////////
-// Bring in Models & Helpers
-const Wishlist = require('../../models/wishlist')
-const auth = require('../../middleware/auth')
-////////////////////////////////////////////////////////////
 // add address api
 router.post('/address/add', auth, async (req, res) => {
   try {

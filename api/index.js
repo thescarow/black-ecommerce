@@ -29,8 +29,15 @@ app.use(cors())
 
 setupDB()
 require('./config/passport')(app)
-app.use(routes)
+
+const { apiURL } = keys.app
+
+const api = `/${apiURL}`
+// api routes
+app.use(api, routes)
+app.use(api, (req, res) => res.status(404).json('No API route found'))
 // All other GET requests should return the React app
+
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'client', 'dist', 'index.html'))
 })
