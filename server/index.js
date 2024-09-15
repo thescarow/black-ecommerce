@@ -7,7 +7,7 @@ const cors = require('cors')
 const helmet = require('helmet')
 
 const keys = require('./config/keys')
-const routes = require('./routes')
+const routes = require('./api')
 const socket = require('./socket')
 const setupDB = require('./utils/db')
 

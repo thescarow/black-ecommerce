@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/routes/$1"
+      "destination": "/server/api/$1"
     },
     {
       "source": "/(.*)",
