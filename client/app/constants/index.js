@@ -1,5 +1,5 @@
-export const API_URL = "https://black-ecommerce-api.vercel.app/api"
-// export const API_URL = window.location.host + "/api"
+// export const API_URL = "https://black-ecommerce-api.vercel.app/api"
+export const API_URL = window.location.host + "/api"
 
 export const SOCKET_URL =
   window.location.host.indexOf("localhost") >= 0
