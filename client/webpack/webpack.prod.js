@@ -1,25 +1,25 @@
-require('dotenv').config()
-const webpack = require('webpack')
-const path = require('path')
-const TerserPlugin = require('terser-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const WebpackPwaManifest = require('webpack-pwa-manifest')
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const webpackMerge = require('webpack-merge')
+require("dotenv").config()
+const webpack = require("webpack")
+const path = require("path")
+const TerserPlugin = require("terser-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const WebpackPwaManifest = require("webpack-pwa-manifest")
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin")
+const webpackMerge = require("webpack-merge")
 
-const common = require('./webpack.common')
+const common = require("./webpack.common")
 
 const CURRENT_WORKING_DIR = process.cwd()
 const NODE_ENV = process.env.NODE_ENV
 const API_URL = process.env.API_URL
 
 const config = {
-  mode: 'production',
+  mode: "production",
   output: {
-    path: path.join(CURRENT_WORKING_DIR, '/dist'),
-    filename: 'js/[name].[hash].js',
-    publicPath: '/'
+    path: path.join(CURRENT_WORKING_DIR, "/build"),
+    filename: "js/[name].[hash].js",
+    publicPath: "/"
   },
   module: {
     rules: [
@@ -28,16 +28,16 @@ const config = {
         use: [
           MiniCssExtractPlugin.loader,
           {
-            loader: 'css-loader'
+            loader: "css-loader"
           },
           {
-            loader: 'postcss-loader',
+            loader: "postcss-loader",
             options: {
-              plugins: () => [require('cssnano'), require('autoprefixer')]
+              plugins: () => [require("cssnano"), require("autoprefixer")]
             }
           },
           {
-            loader: 'sass-loader'
+            loader: "sass-loader"
           }
         ]
       },
@@ -45,11 +45,11 @@ const config = {
         test: /\.(png|jpg|jpeg|gif|svg|ico)$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: "file-loader",
             options: {
-              outputPath: 'images',
-              publicPath: '../images',
-              name: '[name].[hash].[ext]'
+              outputPath: "images",
+              publicPath: "../images",
+              name: "[name].[hash].[ext]"
             }
           }
         ]
@@ -58,11 +58,11 @@ const config = {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: "file-loader",
             options: {
-              outputPath: 'fonts',
-              publicPath: '../fonts',
-              name: '[name].[hash].[ext]'
+              outputPath: "fonts",
+              publicPath: "../fonts",
+              name: "[name].[hash].[ext]"
             }
           }
         ]
@@ -76,21 +76,21 @@ const config = {
   },
   optimization: {
     minimize: true,
-    nodeEnv: 'production',
+    nodeEnv: "production",
     sideEffects: true,
     concatenateModules: true,
-    runtimeChunk: 'single',
+    runtimeChunk: "single",
     splitChunks: {
       cacheGroups: {
         vendors: {
           test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all'
+          name: "vendors",
+          chunks: "all"
         },
         styles: {
           test: /\.css$/,
-          name: 'styles',
-          chunks: 'all',
+          name: "styles",
+          chunks: "all",
           enforce: true
         }
       }
@@ -114,13 +114,13 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
+      "process.env": {
         NODE_ENV: JSON.stringify(NODE_ENV),
         API_URL: JSON.stringify(API_URL)
       }
     }),
     new HtmlWebpackPlugin({
-      template: path.join(CURRENT_WORKING_DIR, 'public/index.html'),
+      template: path.join(CURRENT_WORKING_DIR, "public/index.html"),
       inject: true,
       minify: {
         removeComments: true,
@@ -136,35 +136,35 @@ const config = {
       }
     }),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[hash].css'
+      filename: "css/[name].[hash].css"
     }),
     new WebpackPwaManifest({
-      name: 'Black Store',
-      short_name: 'BlackStore',
-      description: 'Black Store!',
-      background_color: '#fff',
-      theme_color: '#4a68aa',
+      name: "Black Store",
+      short_name: "BlackStore",
+      description: "Black Store!",
+      background_color: "#fff",
+      theme_color: "#4a68aa",
       inject: true,
       ios: true,
       icons: [
         {
-          src: path.resolve('public/images/pwa.png'),
-          destination: 'images',
+          src: path.resolve("public/images/pwa.png"),
+          destination: "images",
           sizes: [72, 96, 128, 144, 192, 384, 512]
         },
         {
-          src: path.resolve('public/images/pwa.png'),
+          src: path.resolve("public/images/pwa.png"),
           sizes: [120, 152, 167, 180],
-          destination: 'images',
+          destination: "images",
           ios: true
         }
       ]
     }),
     new OptimizeCssAssetsPlugin({
       assetNameRegExp: /\.css$/g,
-      cssProcessor: require('cssnano'),
+      cssProcessor: require("cssnano"),
       cssProcessorPluginOptions: {
-        preset: ['default', { discardComments: { removeAll: true } }]
+        preset: ["default", { discardComments: { removeAll: true } }]
       },
       canPrint: true
     })
