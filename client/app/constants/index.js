@@ -1,10 +1,10 @@
 // export const API_URL = "https://black-ecommerce-api.vercel.app/api"
-export const API_URL = window.location.host + "/api"
+export const API_URL = window.location.origin + "/api"
 
 export const SOCKET_URL =
   window.location.host.indexOf("localhost") >= 0
     ? "http://127.0.0.1:3000"
-    : window.location.host
+    : window.location.origin
 
 export const ROLES = {
   Admin: "ROLE ADMIN",

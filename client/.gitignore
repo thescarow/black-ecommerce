@@ -4,7 +4,6 @@
 .pnp.js
 
 # production
-/build
 
 # # misc
 # package.json.bak
@@ -36,7 +35,6 @@
 Thumbs.db
 
 # Optional: Uncomment if using TypeScript
-# *.tsbuildinfo
 
 # Optional: Uncomment if using Next.js
 # /.next/

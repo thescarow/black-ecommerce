@@ -1,6 +1,6 @@
-// if (process.env.NODE_ENV !== "production") {
-// require("dotenv").config()
-// }
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
 const chalk = require("chalk")
 const express = require("express")
 const path = require("path")
@@ -30,16 +30,16 @@ app.use(express.static(path.join(__dirname, "..", "client", "build")))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(
-  helmet({
-    contentSecurityPolicy: false,
-    frameguard: true
-  })
-)
-app.use(
   cors({
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
+  })
+)
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    frameguard: true
   })
 )
 
