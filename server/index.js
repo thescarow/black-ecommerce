@@ -46,9 +46,9 @@ app.use(
 require("./config/passport")(app)
 const { apiURL } = keys.app
 // testing routes
-app.get("/", (req, res) => {
-  res.status(200).json("Hello from server")
-})
+// app.get("/", (req, res) => {
+//   res.status(200).json("Hello from server")
+// })
 const api = `/${apiURL}`
 // api routes
 app.use(api, routes)
