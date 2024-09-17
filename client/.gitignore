@@ -5,7 +5,6 @@
 
 # production
 /build
-/dist
 
 # # misc
 # package.json.bak

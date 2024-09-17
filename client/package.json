@@ -4,7 +4,7 @@
   "description": "Black Ecommerce Client",
   "scripts": {
     "clean": "rimraf dist",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --mode production --config webpack/webpack.prod.js",
+    "build": "cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider webpack --mode production --config webpack/webpack.prod.js",
     "dev": "cross-env NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=development webpack-dev-server --config webpack/webpack.dev.js"
   },
   "dependencies": {
