@@ -1,4 +1,5 @@
-export const API_URL = process.env.API_URL
+// export const API_URL = process.env.API_URL || window.location.host
+export const API_URL = window.location.host + "/api"
 
 export const SOCKET_URL =
   window.location.host.indexOf("localhost") >= 0

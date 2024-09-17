@@ -26,7 +26,7 @@ mongoose
 ////////////////////////////////////////////////////////////
 const app = express()
 // Serve static files from the React app
-// app.use(express.static(path.join(__dirname, "..", "client", "dist")))
+app.use(express.static(path.join(__dirname, "..", "client", "dist")))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(
@@ -55,9 +55,9 @@ app.use(api, routes)
 app.use(api, (req, res) => res.status(404).json("No API route found"))
 
 // All other GET requests should return the React app
-// app.get("*", (req, res) => {
-//   res.sendFile(path.resolve(__dirname, "..", "client", "dist", "index.html"))
-// })
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "..", "client", "dist", "index.html"))
+})
 
 const server = app.listen(keys.port, () => {
   console.log(
