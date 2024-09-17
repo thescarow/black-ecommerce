@@ -5,9 +5,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "npm run clean && cross-env NODE_ENV=production NODE_OPTIONS=--openssl-legacy-provider webpack --mode production --config webpack/webpack.prod.js",
-    "dev": "cross-env NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=development webpack-dev-server --config webpack/webpack.dev.js",
-    "build1": "npm run clean && cross-env NODE_ENV=production webpack --mode production --config webpack/webpack.prod.js",
-    "dev1": "cross-env NODE_ENV=development webpack-dev-server --config webpack/webpack.dev.js"
+    "dev": "cross-env NODE_OPTIONS=--openssl-legacy-provider NODE_ENV=development webpack-dev-server --config webpack/webpack.dev.js"
   },
   "engines": {
     "node": "16.16.0"
