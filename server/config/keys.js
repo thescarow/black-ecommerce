@@ -1,8 +1,9 @@
 module.exports = {
   app: {
-    name: 'Black Ecommerce',
+    name: "Black Ecommerce",
     apiURL: `${process.env.BASE_API_URL}`,
-    clientURL: process.env.CLIENT_URL
+    clientURL: process.env.CLIENT_URL,
+    serverURL: process.env.SERVER_URL
   },
   port: process.env.PORT || 3000,
   database: {
@@ -10,7 +11,7 @@ module.exports = {
   },
   jwt: {
     secret: process.env.JWT_SECRET,
-    tokenLife: '7d'
+    tokenLife: "7d"
   },
   mailchimp: {
     key: process.env.MAILCHIMP_KEY,
@@ -24,12 +25,12 @@ module.exports = {
   google: {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL
+    callbackURL: `${process.env.SERVER_URL}${process.env.GOOGLE_CALLBACK_URL}`
   },
   facebook: {
     clientID: process.env.FACEBOOK_CLIENT_ID,
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-    callbackURL: process.env.FACEBOOK_CALLBACK_URL
+    callbackURL: `${process.env.SERVER_URL}${process.env.FACEBOOK_CALLBACK_URL}`
   },
   aws: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,

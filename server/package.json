@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Black Ecommerce Server",
   "scripts": {
-    "dev": "nodemon",
-    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "nodemon index.js",
+    "start": "node index.js",
     "seed:db": "node utils/seed.js"
   },
   "dependencies": {

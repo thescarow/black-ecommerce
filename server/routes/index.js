@@ -1,19 +1,19 @@
-const express = require('express')
+const express = require("express")
 const router = express.Router()
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const crypto = require('crypto')
-const passport = require('passport')
-const Mongoose = require('mongoose')
-const multer = require('multer')
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+const crypto = require("crypto")
+const passport = require("passport")
+const Mongoose = require("mongoose")
+const multer = require("multer")
 
-const auth = require('../middleware/auth')
-const role = require('../middleware/role')
-const store = require('../utils/store')
+const auth = require("../middleware/auth")
+const role = require("../middleware/role")
+const store = require("../utils/store")
 // Bring in Models & Helpers
-const mailchimp = require('../services/mailchimp')
-const mailgun = require('../services/mailgun')
-const keys = require('../config/keys')
+const mailchimp = require("../services/mailchimp")
+const mailgun = require("../services/mailgun")
+const keys = require("../config/keys")
 const {
   EMAIL_PROVIDER,
   JWT_COOKIE,
@@ -21,33 +21,33 @@ const {
   MERCHANT_STATUS,
   CART_ITEM_STATUS,
   REVIEW_STATUS
-} = require('../constants')
+} = require("../constants")
 
 const { secret, tokenLife } = keys.jwt
 // Bring in Models & Helpers
 
 //////////////////////
 // Bring in Models & Utils
-const User = require('../models/user')
-const Address = require('../models/address')
-const Brand = require('../models/brand')
-const Product = require('../models/product')
-const Merchant = require('../models/merchant')
-const Cart = require('../models/cart')
-const Category = require('../models/category')
-const Contact = require('../models/contact')
-const Order = require('../models/order')
-const Review = require('../models/review')
-const Wishlist = require('../models/wishlist')
+const User = require("../models/user")
+const Address = require("../models/address")
+const Brand = require("../models/brand")
+const Product = require("../models/product")
+const Merchant = require("../models/merchant")
+const Cart = require("../models/cart")
+const Category = require("../models/category")
+const Contact = require("../models/contact")
+const Order = require("../models/order")
+const Review = require("../models/review")
+const Wishlist = require("../models/wishlist")
 
 //////////////////////
 
-const checkAuth = require('../utils/auth')
-const { s3Upload } = require('../utils/storage')
+const checkAuth = require("../utils/auth")
+const { s3Upload } = require("../utils/storage")
 const {
   getStoreProductsQuery,
   getStoreProductsWishListQuery
-} = require('../utils/queries')
+} = require("../utils/queries")
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage })
@@ -55,7 +55,7 @@ const upload = multer({ storage })
 ////////////////////////////////////////////////////////////
 
 // add address api
-router.post('/address/add', auth, async (req, res) => {
+router.post("/address/add", auth, async (req, res) => {
   try {
     const user = req.user
 
@@ -72,13 +72,13 @@ router.post('/address/add', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch all addresses api
-router.get('/address/', auth, async (req, res) => {
+router.get("/address/", auth, async (req, res) => {
   try {
     const addresses = await Address.find({ user: req.user._id })
 
@@ -87,12 +87,12 @@ router.get('/address/', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.get('/address/:id', async (req, res) => {
+router.get("/address/:id", async (req, res) => {
   try {
     const addressId = req.params.id
 
@@ -109,12 +109,12 @@ router.get('/address/:id', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.put('/address/:id', async (req, res) => {
+router.put("/address/:id", async (req, res) => {
   try {
     const addressId = req.params.id
     const update = req.body
@@ -126,16 +126,16 @@ router.put('/address/:id', async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Address has been updated successfully!'
+      message: "Address has been updated successfully!"
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.delete('/address/delete/:id', async (req, res) => {
+router.delete("/address/delete/:id", async (req, res) => {
   try {
     const address = await Address.deleteOne({ _id: req.params.id })
 
@@ -146,7 +146,7 @@ router.delete('/address/delete/:id', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
@@ -154,23 +154,23 @@ router.delete('/address/delete/:id', async (req, res) => {
 // authRoutes
 ///////////////////
 
-router.post('/auth/login', async (req, res) => {
+router.post("/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body
 
     if (!email) {
-      return res.status(400).json({ error: 'You must enter an email address.' })
+      return res.status(400).json({ error: "You must enter an email address." })
     }
 
     if (!password) {
-      return res.status(400).json({ error: 'You must enter a password.' })
+      return res.status(400).json({ error: "You must enter a password." })
     }
 
     const user = await User.findOne({ email })
     if (!user) {
       return res
         .status(400)
-        .send({ error: 'No user found for this email address.' })
+        .send({ error: "No user found for this email address." })
     }
 
     if (user && user.provider !== EMAIL_PROVIDER.Email) {
@@ -184,7 +184,7 @@ router.post('/auth/login', async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({
         success: false,
-        error: 'Password Incorrect'
+        error: "Password Incorrect"
       })
     }
 
@@ -211,25 +211,25 @@ router.post('/auth/login', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.post('/auth/register', async (req, res) => {
+router.post("/auth/register", async (req, res) => {
   try {
     const { email, firstName, lastName, password, isSubscribed } = req.body
 
     if (!email) {
-      return res.status(400).json({ error: 'You must enter an email address.' })
+      return res.status(400).json({ error: "You must enter an email address." })
     }
 
     if (!firstName || !lastName) {
-      return res.status(400).json({ error: 'You must enter your full name.' })
+      return res.status(400).json({ error: "You must enter your full name." })
     }
 
     if (!password) {
-      return res.status(400).json({ error: 'You must enter a password.' })
+      return res.status(400).json({ error: "You must enter a password." })
     }
 
     const existingUser = await User.findOne({ email })
@@ -237,14 +237,14 @@ router.post('/auth/register', async (req, res) => {
     if (existingUser) {
       return res
         .status(400)
-        .json({ error: 'That email address is already in use.' })
+        .json({ error: "That email address is already in use." })
     }
 
     let subscribed = false
     if (isSubscribed) {
       const result = await mailchimp.subscribeToNewsletter(email)
 
-      if (result.status === 'subscribed') {
+      if (result.status === "subscribed") {
         subscribed = true
       }
     }
@@ -268,7 +268,7 @@ router.post('/auth/register', async (req, res) => {
 
     await mailgun.sendEmail(
       registeredUser.email,
-      'signup',
+      "signup",
       null,
       registeredUser
     )
@@ -289,17 +289,17 @@ router.post('/auth/register', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.post('/auth/forgot', async (req, res) => {
+router.post("/auth/forgot", async (req, res) => {
   try {
     const { email } = req.body
 
     if (!email) {
-      return res.status(400).json({ error: 'You must enter an email address.' })
+      return res.status(400).json({ error: "You must enter an email address." })
     }
 
     const existingUser = await User.findOne({ email })
@@ -307,11 +307,11 @@ router.post('/auth/forgot', async (req, res) => {
     if (!existingUser) {
       return res
         .status(400)
-        .send({ error: 'No user found for this email address.' })
+        .send({ error: "No user found for this email address." })
     }
 
     const buffer = crypto.randomBytes(48)
-    const resetToken = buffer.toString('hex')
+    const resetToken = buffer.toString("hex")
 
     existingUser.resetPasswordToken = resetToken
     existingUser.resetPasswordExpires = Date.now() + 3600000
@@ -320,28 +320,28 @@ router.post('/auth/forgot', async (req, res) => {
 
     await mailgun.sendEmail(
       existingUser.email,
-      'reset',
+      "reset",
       req.headers.host,
       resetToken
     )
 
     res.status(200).json({
       success: true,
-      message: 'Please check your email for the link to reset your password.'
+      message: "Please check your email for the link to reset your password."
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.post('/auth/reset/:token', async (req, res) => {
+router.post("/auth/reset/:token", async (req, res) => {
   try {
     const { password } = req.body
 
     if (!password) {
-      return res.status(400).json({ error: 'You must enter a password.' })
+      return res.status(400).json({ error: "You must enter a password." })
     }
 
     const resetUser = await User.findOne({
@@ -352,7 +352,7 @@ router.post('/auth/reset/:token', async (req, res) => {
     if (!resetUser) {
       return res.status(400).json({
         error:
-          'Your token has expired. Please attempt to reset your password again.'
+          "Your token has expired. Please attempt to reset your password again."
       })
     }
 
@@ -365,38 +365,38 @@ router.post('/auth/reset/:token', async (req, res) => {
 
     resetUser.save()
 
-    await mailgun.sendEmail(resetUser.email, 'reset-confirmation')
+    await mailgun.sendEmail(resetUser.email, "reset-confirmation")
 
     res.status(200).json({
       success: true,
       message:
-        'Password changed successfully. Please login with your new password.'
+        "Password changed successfully. Please login with your new password."
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.post('/auth/reset', auth, async (req, res) => {
+router.post("/auth/reset", auth, async (req, res) => {
   try {
     const { password, confirmPassword } = req.body
     const email = req.user.email
 
     if (!email) {
-      return res.status(401).send('Unauthenticated')
+      return res.status(401).send("Unauthenticated")
     }
 
     if (!password) {
-      return res.status(400).json({ error: 'You must enter a password.' })
+      return res.status(400).json({ error: "You must enter a password." })
     }
 
     const existingUser = await User.findOne({ email })
     if (!existingUser) {
       return res
         .status(400)
-        .json({ error: 'That email address is already in use.' })
+        .json({ error: "That email address is already in use." })
     }
 
     const isMatch = await bcrypt.compare(password, existingUser.password)
@@ -404,7 +404,7 @@ router.post('/auth/reset', auth, async (req, res) => {
     if (!isMatch) {
       return res
         .status(400)
-        .json({ error: 'Please enter your correct old password.' })
+        .json({ error: "Please enter your correct old password." })
     }
 
     const salt = await bcrypt.genSalt(10)
@@ -412,33 +412,33 @@ router.post('/auth/reset', auth, async (req, res) => {
     existingUser.password = hash
     existingUser.save()
 
-    await mailgun.sendEmail(existingUser.email, 'reset-confirmation')
+    await mailgun.sendEmail(existingUser.email, "reset-confirmation")
 
     res.status(200).json({
       success: true,
       message:
-        'Password changed successfully. Please login with your new password.'
+        "Password changed successfully. Please login with your new password."
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 router.get(
-  '/auth/google',
-  passport.authenticate('google', {
+  "/auth/google",
+  passport.authenticate("google", {
     session: false,
-    scope: ['profile', 'email'],
-    accessType: 'offline',
-    approvalPrompt: 'force'
+    scope: ["profile", "email"],
+    accessType: "offline",
+    approvalPrompt: "force"
   })
 )
 
 router.get(
-  '/auth/google/callback',
-  passport.authenticate('google', {
+  "/auth/google/callback",
+  passport.authenticate("google", {
     failureRedirect: `${keys.app.clientURL}/login`,
     session: false
   }),
@@ -455,16 +455,16 @@ router.get(
 )
 
 router.get(
-  '/auth/facebook',
-  passport.authenticate('facebook', {
+  "/auth/facebook",
+  passport.authenticate("facebook", {
     session: false,
-    scope: ['public_profile', 'email']
+    scope: ["public_profile", "email"]
   })
 )
 
 router.get(
-  '/auth/facebook/callback',
-  passport.authenticate('facebook', {
+  "/auth/facebook/callback",
+  passport.authenticate("facebook", {
     failureRedirect: `${keys.app.clientURL}/login`,
     session: false
   }),
@@ -482,7 +482,7 @@ router.get(
 // /brand
 /////////////////////////////
 
-router.post('/brand/add', auth, role.check(ROLES.Admin), async (req, res) => {
+router.post("/brand/add", auth, role.check(ROLES.Admin), async (req, res) => {
   try {
     const name = req.body.name
     const description = req.body.description
@@ -491,7 +491,7 @@ router.post('/brand/add', auth, role.check(ROLES.Admin), async (req, res) => {
     if (!description || !name) {
       return res
         .status(400)
-        .json({ error: 'You must enter description & name.' })
+        .json({ error: "You must enter description & name." })
     }
 
     const brand = new Brand({
@@ -509,31 +509,31 @@ router.post('/brand/add', auth, role.check(ROLES.Admin), async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch store brands api
-router.get('/brand/list', async (req, res) => {
+router.get("/brand/list", async (req, res) => {
   try {
     const brands = await Brand.find({
       isActive: true
-    }).populate('merchant', 'name')
+    }).populate("merchant", "name")
 
     res.status(200).json({
       brands
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch brands api
 router.get(
-  '/brand/',
+  "/brand/",
   auth,
   role.check(ROLES.Admin, ROLES.Merchant),
   async (req, res) => {
@@ -543,9 +543,9 @@ router.get(
       if (req.user.merchant) {
         brands = await Brand.find({
           merchant: req.user.merchant
-        }).populate('merchant', 'name')
+        }).populate("merchant", "name")
       } else {
-        brands = await Brand.find({}).populate('merchant', 'name')
+        brands = await Brand.find({}).populate("merchant", "name")
       }
 
       res.status(200).json({
@@ -553,19 +553,19 @@ router.get(
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
 )
 
-router.get('/brand/:id', async (req, res) => {
+router.get("/brand/:id", async (req, res) => {
   try {
     const brandId = req.params.id
 
     const brandDoc = await Brand.findOne({ _id: brandId }).populate(
-      'merchant',
-      '_id'
+      "merchant",
+      "_id"
     )
 
     if (!brandDoc) {
@@ -579,13 +579,13 @@ router.get('/brand/:id', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 router.get(
-  '/brand/list/select',
+  "/brand/list/select",
   auth,
   role.check(ROLES.Admin, ROLES.Merchant),
   async (req, res) => {
@@ -597,10 +597,10 @@ router.get(
           {
             merchant: req.user.merchant
           },
-          'name'
+          "name"
         )
       } else {
-        brands = await Brand.find({}, 'name')
+        brands = await Brand.find({}, "name")
       }
 
       res.status(200).json({
@@ -608,14 +608,14 @@ router.get(
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
 )
 
 router.put(
-  '/brand/:id',
+  "/brand/:id",
   auth,
   role.check(ROLES.Admin, ROLES.Merchant),
   async (req, res) => {
@@ -630,7 +630,7 @@ router.put(
       })
 
       if (foundBrand && foundBrand._id != brandId) {
-        return res.status(400).json({ error: 'Slug is already in use.' })
+        return res.status(400).json({ error: "Slug is already in use." })
       }
 
       await Brand.findOneAndUpdate(query, update, {
@@ -639,18 +639,18 @@ router.put(
 
       res.status(200).json({
         success: true,
-        message: 'Brand has been updated successfully!'
+        message: "Brand has been updated successfully!"
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
 )
 
 router.put(
-  '/brand/:id/active',
+  "/brand/:id/active",
   auth,
   role.check(ROLES.Admin, ROLES.Merchant),
   async (req, res) => {
@@ -671,18 +671,18 @@ router.put(
 
       res.status(200).json({
         success: true,
-        message: 'Brand has been updated successfully!'
+        message: "Brand has been updated successfully!"
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
 )
 
 router.delete(
-  '/brand/delete/:id',
+  "/brand/delete/:id",
   auth,
   role.check(ROLES.Admin),
   async (req, res) => {
@@ -698,7 +698,7 @@ router.delete(
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
@@ -706,8 +706,8 @@ router.delete(
 
 const deactivateMerchant = async brandId => {
   const brandDoc = await Brand.findOne({ _id: brandId }).populate(
-    'merchant',
-    '_id'
+    "merchant",
+    "_id"
   )
   if (!brandDoc || !brandDoc.merchant) return
   const merchantId = brandDoc.merchant._id
@@ -724,7 +724,7 @@ const deactivateMerchant = async brandId => {
 ////////////////////////
 // /cart
 ////////////////////////
-router.post('/cart/add', auth, async (req, res) => {
+router.post("/cart/add", auth, async (req, res) => {
   try {
     const user = req.user._id
     const items = req.body.products
@@ -746,12 +746,12 @@ router.post('/cart/add', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.delete('/cart/delete/:cartId', auth, async (req, res) => {
+router.delete("/cart/delete/:cartId", auth, async (req, res) => {
   try {
     await Cart.deleteOne({ _id: req.params.cartId })
 
@@ -760,12 +760,12 @@ router.delete('/cart/delete/:cartId', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.post('/cart/add/:cartId', auth, async (req, res) => {
+router.post("/cart/add/:cartId", auth, async (req, res) => {
   try {
     const product = req.body.product
     const query = { _id: req.params.cartId }
@@ -777,12 +777,12 @@ router.post('/cart/add/:cartId', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.delete('/cart/delete/:cartId/:productId', auth, async (req, res) => {
+router.delete("/cart/delete/:cartId/:productId", auth, async (req, res) => {
   try {
     const product = { product: req.params.productId }
     const query = { _id: req.params.cartId }
@@ -794,7 +794,7 @@ router.delete('/cart/delete/:cartId/:productId', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
@@ -816,14 +816,14 @@ const decreaseQuantity = products => {
 // /category
 ///////////////////////////////////
 
-router.post('/category/add', auth, role.check(ROLES.Admin), (req, res) => {
+router.post("/category/add", auth, role.check(ROLES.Admin), (req, res) => {
   const name = req.body.name
   const description = req.body.description
   const products = req.body.products
   const isActive = req.body.isActive
 
   if (!description || !name) {
-    return res.status(400).json({ error: 'You must enter description & name.' })
+    return res.status(400).json({ error: "You must enter description & name." })
   }
 
   const category = new Category({
@@ -836,7 +836,7 @@ router.post('/category/add', auth, role.check(ROLES.Admin), (req, res) => {
   category.save((err, data) => {
     if (err) {
       return res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
 
@@ -849,7 +849,7 @@ router.post('/category/add', auth, role.check(ROLES.Admin), (req, res) => {
 })
 
 // fetch store categories api
-router.get('/category/list', async (req, res) => {
+router.get("/category/list", async (req, res) => {
   try {
     const categories = await Category.find({ isActive: true })
     res.status(200).json({
@@ -857,13 +857,13 @@ router.get('/category/list', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch categories api
-router.get('/category/', async (req, res) => {
+router.get("/category/", async (req, res) => {
   try {
     const categories = await Category.find({})
     res.status(200).json({
@@ -871,24 +871,24 @@ router.get('/category/', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch category api
-router.get('/category/:id', async (req, res) => {
+router.get("/category/:id", async (req, res) => {
   try {
     const categoryId = req.params.id
 
     const categoryDoc = await Category.findOne({ _id: categoryId }).populate({
-      path: 'products',
-      select: 'name'
+      path: "products",
+      select: "name"
     })
 
     if (!categoryDoc) {
       return res.status(404).json({
-        message: 'No Category found.'
+        message: "No Category found."
       })
     }
 
@@ -897,12 +897,12 @@ router.get('/category/:id', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.put('/category/:id', auth, role.check(ROLES.Admin), async (req, res) => {
+router.put("/category/:id", auth, role.check(ROLES.Admin), async (req, res) => {
   try {
     const categoryId = req.params.id
     const update = req.body.category
@@ -914,7 +914,7 @@ router.put('/category/:id', auth, role.check(ROLES.Admin), async (req, res) => {
     })
 
     if (foundCategory && foundCategory._id != categoryId) {
-      return res.status(400).json({ error: 'Slug is already in use.' })
+      return res.status(400).json({ error: "Slug is already in use." })
     }
 
     await Category.findOneAndUpdate(query, update, {
@@ -923,17 +923,17 @@ router.put('/category/:id', auth, role.check(ROLES.Admin), async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Category has been updated successfully!'
+      message: "Category has been updated successfully!"
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 router.put(
-  '/category/:id/active',
+  "/category/:id/active",
   auth,
   role.check(ROLES.Admin),
   async (req, res) => {
@@ -946,8 +946,8 @@ router.put(
       if (!update.isActive) {
         const categoryDoc = await Category.findOne(
           { _id: categoryId, isActive: true },
-          'products -_id'
-        ).populate('products')
+          "products -_id"
+        ).populate("products")
 
         store.disableProducts(categoryDoc.products)
       }
@@ -958,18 +958,18 @@ router.put(
 
       res.status(200).json({
         success: true,
-        message: 'Category has been updated successfully!'
+        message: "Category has been updated successfully!"
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
 )
 
 router.delete(
-  '/category/delete/:id',
+  "/category/delete/:id",
   auth,
   role.check(ROLES.Admin),
   async (req, res) => {
@@ -983,7 +983,7 @@ router.delete(
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
@@ -992,24 +992,24 @@ router.delete(
 /////////////////////////////////////
 // /contact
 /////////////////////////////////////
-router.post('/contact/add', async (req, res) => {
+router.post("/contact/add", async (req, res) => {
   try {
     const name = req.body.name
     const email = req.body.email
     const message = req.body.message
 
     if (!email) {
-      return res.status(400).json({ error: 'You must enter an email address.' })
+      return res.status(400).json({ error: "You must enter an email address." })
     }
 
     if (!name) {
       return res
         .status(400)
-        .json({ error: 'You must enter description & name.' })
+        .json({ error: "You must enter description & name." })
     }
 
     if (!message) {
-      return res.status(400).json({ error: 'You must enter a message.' })
+      return res.status(400).json({ error: "You must enter a message." })
     }
 
     const existingContact = await Contact.findOne({ email })
@@ -1017,7 +1017,7 @@ router.post('/contact/add', async (req, res) => {
     if (existingContact) {
       return res
         .status(400)
-        .json({ error: 'A request already existed for same email address' })
+        .json({ error: "A request already existed for same email address" })
     }
 
     const contact = new Contact({
@@ -1028,7 +1028,7 @@ router.post('/contact/add', async (req, res) => {
 
     const contactDoc = await contact.save()
 
-    await mailgun.sendEmail(email, 'contact')
+    await mailgun.sendEmail(email, "contact")
 
     res.status(200).json({
       success: true,
@@ -1037,7 +1037,7 @@ router.post('/contact/add', async (req, res) => {
     })
   } catch (error) {
     return res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
@@ -1047,26 +1047,26 @@ router.post('/contact/add', async (req, res) => {
 //////////////////////////////////////
 
 // add merchant api
-router.post('/merchant/add', async (req, res) => {
+router.post("/merchant/add", async (req, res) => {
   try {
     const { name, business, phoneNumber, email, brandName } = req.body
 
     if (!name || !email) {
       return res
         .status(400)
-        .json({ error: 'You must enter your name and email.' })
+        .json({ error: "You must enter your name and email." })
     }
 
     if (!business) {
       return res
         .status(400)
-        .json({ error: 'You must enter a business description.' })
+        .json({ error: "You must enter a business description." })
     }
 
     if (!phoneNumber || !email) {
       return res
         .status(400)
-        .json({ error: 'You must enter a phone number and an email address.' })
+        .json({ error: "You must enter a phone number and an email address." })
     }
 
     const existingMerchant = await Merchant.findOne({ email })
@@ -1074,7 +1074,7 @@ router.post('/merchant/add', async (req, res) => {
     if (existingMerchant) {
       return res
         .status(400)
-        .json({ error: 'That email address is already in use.' })
+        .json({ error: "That email address is already in use." })
     }
 
     const merchant = new Merchant({
@@ -1086,7 +1086,7 @@ router.post('/merchant/add', async (req, res) => {
     })
     const merchantDoc = await merchant.save()
 
-    await mailgun.sendEmail(email, 'merchant-application')
+    await mailgun.sendEmail(email, "merchant-application")
 
     res.status(200).json({
       success: true,
@@ -1095,21 +1095,21 @@ router.post('/merchant/add', async (req, res) => {
     })
   } catch (error) {
     return res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // search merchants api
 router.get(
-  '/merchant/search',
+  "/merchant/search",
   auth,
   role.check(ROLES.Admin),
   async (req, res) => {
     try {
       const { search } = req.query
 
-      const regex = new RegExp(search, 'i')
+      const regex = new RegExp(search, "i")
 
       const merchants = await Merchant.find({
         $or: [
@@ -1119,27 +1119,27 @@ router.get(
           { brandName: { $regex: regex } },
           { status: { $regex: regex } }
         ]
-      }).populate('brand', 'name')
+      }).populate("brand", "name")
 
       res.status(200).json({
         merchants
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
 )
 
 // fetch all merchants api
-router.get('/merchant/', auth, role.check(ROLES.Admin), async (req, res) => {
+router.get("/merchant/", auth, role.check(ROLES.Admin), async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query
 
     const merchants = await Merchant.find()
-      .populate('brand')
-      .sort('-created')
+      .populate("brand")
+      .sort("-created")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
@@ -1154,13 +1154,13 @@ router.get('/merchant/', auth, role.check(ROLES.Admin), async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // disable merchant account
-router.put('/merchant/:id/active', auth, async (req, res) => {
+router.put("/merchant/:id/active", auth, async (req, res) => {
   try {
     const merchantId = req.params.id
     const update = req.body.merchant
@@ -1172,7 +1172,7 @@ router.put('/merchant/:id/active', auth, async (req, res) => {
 
     if (!update.isActive) {
       await deactivateBrand(merchantId)
-      await mailgun.sendEmail(merchantDoc.email, 'merchant-deactivate-account')
+      await mailgun.sendEmail(merchantDoc.email, "merchant-deactivate-account")
     }
 
     res.status(200).json({
@@ -1180,13 +1180,13 @@ router.put('/merchant/:id/active', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // approve merchant
-router.put('/merchant/approve/:id', auth, async (req, res) => {
+router.put("/merchant/approve/:id", auth, async (req, res) => {
   try {
     const merchantId = req.params.id
     const query = { _id: merchantId }
@@ -1211,13 +1211,13 @@ router.put('/merchant/approve/:id', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // reject merchant
-router.put('/merchant/reject/:id', auth, async (req, res) => {
+router.put("/merchant/reject/:id", auth, async (req, res) => {
   try {
     const merchantId = req.params.id
 
@@ -1235,25 +1235,25 @@ router.put('/merchant/reject/:id', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.post('/merchant/signup/:token', async (req, res) => {
+router.post("/merchant/signup/:token", async (req, res) => {
   try {
     const { email, firstName, lastName, password } = req.body
 
     if (!email) {
-      return res.status(400).json({ error: 'You must enter an email address.' })
+      return res.status(400).json({ error: "You must enter an email address." })
     }
 
     if (!firstName || !lastName) {
-      return res.status(400).json({ error: 'You must enter your full name.' })
+      return res.status(400).json({ error: "You must enter your full name." })
     }
 
     if (!password) {
-      return res.status(400).json({ error: 'You must enter a password.' })
+      return res.status(400).json({ error: "You must enter a password." })
     }
 
     const userDoc = await User.findOne({
@@ -1288,13 +1288,13 @@ router.post('/merchant/signup/:token', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 router.delete(
-  '/merchant/delete/:id',
+  "/merchant/delete/:id",
   auth,
   role.check(ROLES.Admin),
   async (req, res) => {
@@ -1310,7 +1310,7 @@ router.delete(
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
@@ -1318,8 +1318,8 @@ router.delete(
 
 const deactivateBrand = async merchantId => {
   const merchantDoc = await Merchant.findOne({ _id: merchantId }).populate(
-    'brand',
-    '_id'
+    "brand",
+    "_id"
   )
   if (!merchantDoc || !merchantDoc.brand) return
   const brandId = merchantDoc.brand._id
@@ -1350,7 +1350,7 @@ const createMerchantBrand = async ({ _id, brandName, business }) => {
 
 const createMerchantUser = async (email, name, merchant, host) => {
   const firstName = name
-  const lastName = ''
+  const lastName = ""
 
   const existingUser = await User.findOne({ email })
 
@@ -1367,14 +1367,14 @@ const createMerchantUser = async (email, name, merchant, host) => {
 
     await createMerchantBrand(merchantDoc)
 
-    await mailgun.sendEmail(email, 'merchant-welcome', null, name)
+    await mailgun.sendEmail(email, "merchant-welcome", null, name)
 
     return await User.findOneAndUpdate(query, update, {
       new: true
     })
   } else {
     const buffer = await crypto.randomBytes(48)
-    const resetToken = buffer.toString('hex')
+    const resetToken = buffer.toString("hex")
     const resetPasswordToken = resetToken
 
     const user = new User({
@@ -1386,7 +1386,7 @@ const createMerchantUser = async (email, name, merchant, host) => {
       role: ROLES.Merchant
     })
 
-    await mailgun.sendEmail(email, 'merchant-signup', host, {
+    await mailgun.sendEmail(email, "merchant-signup", host, {
       resetToken,
       email
     })
@@ -1398,11 +1398,11 @@ const createMerchantUser = async (email, name, merchant, host) => {
 //////////////////////////////
 // /newsletter
 //////////////////////////////
-router.post('/newsletter/subscribe', async (req, res) => {
+router.post("/newsletter/subscribe", async (req, res) => {
   const email = req.body.email
 
   if (!email) {
-    return res.status(400).json({ error: 'You must enter an email address.' })
+    return res.status(400).json({ error: "You must enter an email address." })
   }
 
   const result = await mailchimp.subscribeToNewsletter(email)
@@ -1411,11 +1411,11 @@ router.post('/newsletter/subscribe', async (req, res) => {
     return res.status(400).json({ error: result.title })
   }
 
-  await mailgun.sendEmail(email, 'newsletter-subscription')
+  await mailgun.sendEmail(email, "newsletter-subscription")
 
   res.status(200).json({
     success: true,
-    message: 'You have successfully subscribed to the newsletter'
+    message: "You have successfully subscribed to the newsletter"
   })
 })
 
@@ -1423,7 +1423,7 @@ router.post('/newsletter/subscribe', async (req, res) => {
 // /order
 ///////////////////////////
 
-router.post('/order/add', auth, async (req, res) => {
+router.post("/order/add", auth, async (req, res) => {
   try {
     const cart = req.body.cartId
     const total = req.body.total
@@ -1438,9 +1438,9 @@ router.post('/order/add', auth, async (req, res) => {
     const orderDoc = await order.save()
 
     const cartDoc = await Cart.findById(orderDoc.cart._id).populate({
-      path: 'products.product',
+      path: "products.product",
       populate: {
-        path: 'brand'
+        path: "brand"
       }
     })
 
@@ -1452,7 +1452,7 @@ router.post('/order/add', auth, async (req, res) => {
       products: cartDoc.products
     }
 
-    await mailgun.sendEmail(order.user.email, 'order-confirmation', newOrder)
+    await mailgun.sendEmail(order.user.email, "order-confirmation", newOrder)
 
     res.status(200).json({
       success: true,
@@ -1461,13 +1461,13 @@ router.post('/order/add', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // search orders api
-router.get('/order/search', auth, async (req, res) => {
+router.get("/order/search", auth, async (req, res) => {
   try {
     const { search } = req.query
 
@@ -1483,11 +1483,11 @@ router.get('/order/search', auth, async (req, res) => {
       ordersDoc = await Order.find({
         _id: Mongoose.Types.ObjectId(search)
       }).populate({
-        path: 'cart',
+        path: "cart",
         populate: {
-          path: 'products.product',
+          path: "products.product",
           populate: {
-            path: 'brand'
+            path: "brand"
           }
         }
       })
@@ -1497,11 +1497,11 @@ router.get('/order/search', auth, async (req, res) => {
         _id: Mongoose.Types.ObjectId(search),
         user
       }).populate({
-        path: 'cart',
+        path: "cart",
         populate: {
-          path: 'products.product',
+          path: "products.product",
           populate: {
-            path: 'brand'
+            path: "brand"
           }
         }
       })
@@ -1531,23 +1531,23 @@ router.get('/order/search', auth, async (req, res) => {
     }
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch orders api
-router.get('/order/', auth, async (req, res) => {
+router.get("/order/", auth, async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query
     const ordersDoc = await Order.find()
-      .sort('-created')
+      .sort("-created")
       .populate({
-        path: 'cart',
+        path: "cart",
         populate: {
-          path: 'products.product',
+          path: "products.product",
           populate: {
-            path: 'brand'
+            path: "brand"
           }
         }
       })
@@ -1566,26 +1566,26 @@ router.get('/order/', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch my orders api
-router.get('/order/me', auth, async (req, res) => {
+router.get("/order/me", auth, async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query
     const user = req.user._id
     const query = { user }
 
     const ordersDoc = await Order.find(query)
-      .sort('-created')
+      .sort("-created")
       .populate({
-        path: 'cart',
+        path: "cart",
         populate: {
-          path: 'products.product',
+          path: "products.product",
           populate: {
-            path: 'brand'
+            path: "brand"
           }
         }
       })
@@ -1604,13 +1604,13 @@ router.get('/order/me', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch order api
-router.get('/order/:orderId', auth, async (req, res) => {
+router.get("/order/:orderId", auth, async (req, res) => {
   try {
     const orderId = req.params.orderId
 
@@ -1618,22 +1618,22 @@ router.get('/order/:orderId', auth, async (req, res) => {
 
     if (req.user.role === ROLES.Admin) {
       orderDoc = await Order.findOne({ _id: orderId }).populate({
-        path: 'cart',
+        path: "cart",
         populate: {
-          path: 'products.product',
+          path: "products.product",
           populate: {
-            path: 'brand'
+            path: "brand"
           }
         }
       })
     } else {
       const user = req.user._id
       orderDoc = await Order.findOne({ _id: orderId, user }).populate({
-        path: 'cart',
+        path: "cart",
         populate: {
-          path: 'products.product',
+          path: "products.product",
           populate: {
-            path: 'brand'
+            path: "brand"
           }
         }
       })
@@ -1661,12 +1661,12 @@ router.get('/order/:orderId', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.delete('/order/cancel/:orderId', auth, async (req, res) => {
+router.delete("/order/cancel/:orderId", auth, async (req, res) => {
   try {
     const orderId = req.params.orderId
 
@@ -1683,25 +1683,25 @@ router.delete('/order/cancel/:orderId', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.put('/order/status/item/:itemId', auth, async (req, res) => {
+router.put("/order/status/item/:itemId", auth, async (req, res) => {
   try {
     const itemId = req.params.itemId
     const orderId = req.body.orderId
     const cartId = req.body.cartId
     const status = req.body.status || CART_ITEM_STATUS.Cancelled
 
-    const foundCart = await Cart.findOne({ 'products._id': itemId })
+    const foundCart = await Cart.findOne({ "products._id": itemId })
     const foundCartProduct = foundCart.products.find(p => p._id == itemId)
 
     await Cart.updateOne(
-      { 'products._id': itemId },
+      { "products._id": itemId },
       {
-        'products.$.status': status
+        "products.$.status": status
       }
     )
 
@@ -1725,24 +1725,24 @@ router.put('/order/status/item/:itemId', auth, async (req, res) => {
           success: true,
           orderCancelled: true,
           message: `${
-            req.user.role === ROLES.Admin ? 'Order' : 'Your order'
+            req.user.role === ROLES.Admin ? "Order" : "Your order"
           } has been cancelled successfully`
         })
       }
 
       return res.status(200).json({
         success: true,
-        message: 'Item has been cancelled successfully!'
+        message: "Item has been cancelled successfully!"
       })
     }
 
     res.status(200).json({
       success: true,
-      message: 'Item status has been updated successfully!'
+      message: "Item status has been updated successfully!"
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
@@ -1765,14 +1765,14 @@ const increaseQuantity = products => {
 ////////////////////////////////////
 
 // fetch product slug api
-router.get('/product/item/:slug', async (req, res) => {
+router.get("/product/item/:slug", async (req, res) => {
   try {
     const slug = req.params.slug
 
     const productDoc = await Product.findOne({ slug, isActive: true }).populate(
       {
-        path: 'brand',
-        select: 'name isActive slug'
+        path: "brand",
+        select: "name isActive slug"
       }
     )
 
@@ -1781,7 +1781,7 @@ router.get('/product/item/:slug', async (req, res) => {
 
     if (!productDoc || hasNoBrand) {
       return res.status(404).json({
-        message: 'No product found.'
+        message: "No product found."
       })
     }
 
@@ -1790,24 +1790,24 @@ router.get('/product/item/:slug', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch product name search api
-router.get('/product/list/search/:name', async (req, res) => {
+router.get("/product/list/search/:name", async (req, res) => {
   try {
     const name = req.params.name
 
     const productDoc = await Product.find(
-      { name: { $regex: new RegExp(name), $options: 'is' }, isActive: true },
+      { name: { $regex: new RegExp(name), $options: "is" }, isActive: true },
       { name: 1, slug: 1, imageUrl: 1, price: 1, _id: 0 }
     )
 
     if (productDoc.length < 0) {
       return res.status(404).json({
-        message: 'No product found.'
+        message: "No product found."
       })
     }
 
@@ -1816,13 +1816,13 @@ router.get('/product/list/search/:name', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch store products by advanced filters api
-router.get('/product/list', async (req, res) => {
+router.get("/product/list", async (req, res) => {
   try {
     let {
       sortOrder,
@@ -1864,7 +1864,7 @@ router.get('/product/list', async (req, res) => {
     if (brandDoc) {
       basicQuery.push({
         $match: {
-          'brand._id': { $eq: brandDoc._id }
+          "brand._id": { $eq: brandDoc._id }
         }
       })
     }
@@ -1898,33 +1898,33 @@ router.get('/product/list', async (req, res) => {
       count
     })
   } catch (error) {
-    console.log('error', error)
+    console.log("error", error)
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.get('/product/list/select', auth, async (req, res) => {
+router.get("/product/list/select", auth, async (req, res) => {
   try {
-    const products = await Product.find({}, 'name')
+    const products = await Product.find({}, "name")
 
     res.status(200).json({
       products
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // add product api
 router.post(
-  '/product/add',
+  "/product/add",
   auth,
   role.check(ROLES.Admin, ROLES.Merchant),
-  upload.single('image'),
+  upload.single("image"),
   async (req, res) => {
     try {
       const sku = req.body.sku
@@ -1938,27 +1938,27 @@ router.post(
       const image = req.file
 
       if (!sku) {
-        return res.status(400).json({ error: 'You must enter sku.' })
+        return res.status(400).json({ error: "You must enter sku." })
       }
 
       if (!description || !name) {
         return res
           .status(400)
-          .json({ error: 'You must enter description & name.' })
+          .json({ error: "You must enter description & name." })
       }
 
       if (!quantity) {
-        return res.status(400).json({ error: 'You must enter a quantity.' })
+        return res.status(400).json({ error: "You must enter a quantity." })
       }
 
       if (!price) {
-        return res.status(400).json({ error: 'You must enter a price.' })
+        return res.status(400).json({ error: "You must enter a price." })
       }
 
       const foundProduct = await Product.findOne({ sku })
 
       if (foundProduct) {
-        return res.status(400).json({ error: 'This sku is already in use.' })
+        return res.status(400).json({ error: "This sku is already in use." })
       }
 
       const { imageUrl, imageKey } = await s3Upload(image)
@@ -1985,7 +1985,7 @@ router.post(
       })
     } catch (error) {
       return res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
@@ -1993,7 +1993,7 @@ router.post(
 
 // fetch products api
 router.get(
-  '/product/',
+  "/product/",
   auth,
   role.check(ROLES.Admin, ROLES.Merchant),
   async (req, res) => {
@@ -2003,25 +2003,25 @@ router.get(
       if (req.user.merchant) {
         const brands = await Brand.find({
           merchant: req.user.merchant
-        }).populate('merchant', '_id')
+        }).populate("merchant", "_id")
 
-        const brandId = brands[0]?.['_id']
+        const brandId = brands[0]?.["_id"]
 
         products = await Product.find({})
           .populate({
-            path: 'brand',
+            path: "brand",
             populate: {
-              path: 'merchant',
-              model: 'Merchant'
+              path: "merchant",
+              model: "Merchant"
             }
           })
-          .where('brand', brandId)
+          .where("brand", brandId)
       } else {
         products = await Product.find({}).populate({
-          path: 'brand',
+          path: "brand",
           populate: {
-            path: 'merchant',
-            model: 'Merchant'
+            path: "merchant",
+            model: "Merchant"
           }
         })
       }
@@ -2031,7 +2031,7 @@ router.get(
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
@@ -2039,7 +2039,7 @@ router.get(
 
 // fetch product api
 router.get(
-  '/product/:id',
+  "/product/:id",
   auth,
   role.check(ROLES.Admin, ROLES.Merchant),
   async (req, res) => {
@@ -2051,26 +2051,26 @@ router.get(
       if (req.user.merchant) {
         const brands = await Brand.find({
           merchant: req.user.merchant
-        }).populate('merchant', '_id')
+        }).populate("merchant", "_id")
 
-        const brandId = brands[0]['_id']
+        const brandId = brands[0]["_id"]
 
         productDoc = await Product.findOne({ _id: productId })
           .populate({
-            path: 'brand',
-            select: 'name'
+            path: "brand",
+            select: "name"
           })
-          .where('brand', brandId)
+          .where("brand", brandId)
       } else {
         productDoc = await Product.findOne({ _id: productId }).populate({
-          path: 'brand',
-          select: 'name'
+          path: "brand",
+          select: "name"
         })
       }
 
       if (!productDoc) {
         return res.status(404).json({
-          message: 'No product found.'
+          message: "No product found."
         })
       }
 
@@ -2079,14 +2079,14 @@ router.get(
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
 )
 
 router.put(
-  '/product/:id',
+  "/product/:id",
   auth,
   role.check(ROLES.Admin, ROLES.Merchant),
   async (req, res) => {
@@ -2101,7 +2101,7 @@ router.put(
       })
 
       if (foundProduct && foundProduct._id != productId) {
-        return res.status(400).json({ error: 'Sku or slug is already in use.' })
+        return res.status(400).json({ error: "Sku or slug is already in use." })
       }
 
       await Product.findOneAndUpdate(query, update, {
@@ -2110,18 +2110,18 @@ router.put(
 
       res.status(200).json({
         success: true,
-        message: 'Product has been updated successfully!'
+        message: "Product has been updated successfully!"
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
 )
 
 router.put(
-  '/product/:id/active',
+  "/product/:id/active",
   auth,
   role.check(ROLES.Admin, ROLES.Merchant),
   async (req, res) => {
@@ -2136,18 +2136,18 @@ router.put(
 
       res.status(200).json({
         success: true,
-        message: 'Product has been updated successfully!'
+        message: "Product has been updated successfully!"
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
 )
 
 router.delete(
-  '/product/delete/:id',
+  "/product/delete/:id",
   auth,
   role.check(ROLES.Admin, ROLES.Merchant),
   async (req, res) => {
@@ -2161,7 +2161,7 @@ router.delete(
       })
     } catch (error) {
       res.status(400).json({
-        error: 'Your request could not be processed. Please try again.'
+        error: "Your request could not be processed. Please try again."
       })
     }
   }
@@ -2171,7 +2171,7 @@ router.delete(
 // /review
 ////////////////////////////////////////////////////
 
-router.post('/review/add', auth, async (req, res) => {
+router.post("/review/add", auth, async (req, res) => {
   try {
     const user = req.user
 
@@ -2189,25 +2189,25 @@ router.post('/review/add', auth, async (req, res) => {
     })
   } catch (error) {
     return res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch all reviews api
-router.get('/review/', async (req, res) => {
+router.get("/review/", async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query
 
     const reviews = await Review.find()
-      .sort('-created')
+      .sort("-created")
       .populate({
-        path: 'user',
-        select: 'firstName'
+        path: "user",
+        select: "firstName"
       })
       .populate({
-        path: 'product',
-        select: 'name slug imageUrl'
+        path: "product",
+        select: "name slug imageUrl"
       })
       .limit(limit * 1)
       .skip((page - 1) * limit)
@@ -2223,12 +2223,12 @@ router.get('/review/', async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.get('/review/:slug', async (req, res) => {
+router.get("/review/:slug", async (req, res) => {
   try {
     const productDoc = await Product.findOne({ slug: req.params.slug })
 
@@ -2237,7 +2237,7 @@ router.get('/review/:slug', async (req, res) => {
 
     if (!productDoc || hasNoBrand) {
       return res.status(404).json({
-        message: 'No product found.'
+        message: "No product found."
       })
     }
 
@@ -2246,22 +2246,22 @@ router.get('/review/:slug', async (req, res) => {
       status: REVIEW_STATUS.Approved
     })
       .populate({
-        path: 'user',
-        select: 'firstName'
+        path: "user",
+        select: "firstName"
       })
-      .sort('-created')
+      .sort("-created")
 
     res.status(200).json({
       reviews
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.put('/review/:id', async (req, res) => {
+router.put("/review/:id", async (req, res) => {
   try {
     const reviewId = req.params.id
     const update = req.body
@@ -2273,17 +2273,17 @@ router.put('/review/:id', async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'review has been updated successfully!'
+      message: "review has been updated successfully!"
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // approve review
-router.put('/review/approve/:reviewId', auth, async (req, res) => {
+router.put("/review/approve/:reviewId", auth, async (req, res) => {
   try {
     const reviewId = req.params.reviewId
 
@@ -2302,13 +2302,13 @@ router.put('/review/approve/:reviewId', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // reject review
-router.put('/review/reject/:reviewId', auth, async (req, res) => {
+router.put("/review/reject/:reviewId", auth, async (req, res) => {
   try {
     const reviewId = req.params.reviewId
 
@@ -2326,12 +2326,12 @@ router.put('/review/reject/:reviewId', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.delete('/review/delete/:id', async (req, res) => {
+router.delete("/review/delete/:id", async (req, res) => {
   try {
     const review = await Review.deleteOne({ _id: req.params.id })
 
@@ -2342,7 +2342,7 @@ router.delete('/review/delete/:id', async (req, res) => {
     })
   } catch (error) {
     return res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
@@ -2352,11 +2352,11 @@ router.delete('/review/delete/:id', async (req, res) => {
 ///////////////////////////////////////////////////////
 
 // search users api
-router.get('/user/search', auth, role.check(ROLES.Admin), async (req, res) => {
+router.get("/user/search", auth, role.check(ROLES.Admin), async (req, res) => {
   try {
     const { search } = req.query
 
-    const regex = new RegExp(search, 'i')
+    const regex = new RegExp(search, "i")
 
     const users = await User.find(
       {
@@ -2367,26 +2367,26 @@ router.get('/user/search', auth, role.check(ROLES.Admin), async (req, res) => {
         ]
       },
       { password: 0, _id: 0 }
-    ).populate('merchant', 'name')
+    ).populate("merchant", "name")
 
     res.status(200).json({
       users
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch users api
-router.get('/user/', auth, async (req, res) => {
+router.get("/user/", auth, async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query
 
     const users = await User.find({}, { password: 0, _id: 0, googleId: 0 })
-      .sort('-created')
-      .populate('merchant', 'name')
+      .sort("-created")
+      .populate("merchant", "name")
       .limit(limit * 1)
       .skip((page - 1) * limit)
       .exec()
@@ -2401,20 +2401,20 @@ router.get('/user/', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.get('/user/me', auth, async (req, res) => {
+router.get("/user/me", auth, async (req, res) => {
   try {
     const user = req.user._id
     const userDoc = await User.findById(user, { password: 0 }).populate({
-      path: 'merchant',
-      model: 'Merchant',
+      path: "merchant",
+      model: "Merchant",
       populate: {
-        path: 'brand',
-        model: 'Brand'
+        path: "brand",
+        model: "Brand"
       }
     })
 
@@ -2423,12 +2423,12 @@ router.get('/user/me', auth, async (req, res) => {
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
-router.put('/user/', auth, async (req, res) => {
+router.put("/user/", auth, async (req, res) => {
   try {
     const user = req.user._id
     const update = req.body.profile
@@ -2440,12 +2440,12 @@ router.put('/user/', auth, async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Your profile is successfully updated!',
+      message: "Your profile is successfully updated!",
       user: userDoc
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
@@ -2454,7 +2454,7 @@ router.put('/user/', auth, async (req, res) => {
 // /wishlist
 //////////////////////////////////////////////////////
 
-router.post('/wishlist/', auth, async (req, res) => {
+router.post("/wishlist/", auth, async (req, res) => {
   try {
     const { product, isLiked } = req.body
     const user = req.user
@@ -2472,7 +2472,7 @@ router.post('/wishlist/', auth, async (req, res) => {
     if (updatedWishlist !== null) {
       res.status(200).json({
         success: true,
-        message: 'Your Wishlist has been updated successfully!',
+        message: "Your Wishlist has been updated successfully!",
         wishlist: updatedWishlist
       })
     } else {
@@ -2492,29 +2492,29 @@ router.post('/wishlist/', auth, async (req, res) => {
     }
   } catch (e) {
     return res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
 
 // fetch wishlist api
-router.get('/wishlist/', auth, async (req, res) => {
+router.get("/wishlist/", auth, async (req, res) => {
   try {
     const user = req.user._id
 
     const wishlist = await Wishlist.find({ user, isLiked: true })
       .populate({
-        path: 'product',
-        select: 'name slug price imageUrl'
+        path: "product",
+        select: "name slug price imageUrl"
       })
-      .sort('-updated')
+      .sort("-updated")
 
     res.status(200).json({
       wishlist
     })
   } catch (error) {
     res.status(400).json({
-      error: 'Your request could not be processed. Please try again.'
+      error: "Your request could not be processed. Please try again."
     })
   }
 })
