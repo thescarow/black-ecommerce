@@ -47,3 +47,6 @@ Thumbs.db
 # /coverage
 .env.development
 .env.production
+
+.env.development
+.env.production
