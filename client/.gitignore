@@ -14,7 +14,7 @@
 # config file
 .env
 .env.local
-.env.development.local
+.env.development
 .env.test.local
 .env.production.local
 
@@ -45,3 +45,5 @@ Thumbs.db
 
 # Optional: Uncomment if using Jest for testing
 # /coverage
+.env.development
+.env.production
