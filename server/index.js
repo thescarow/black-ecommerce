@@ -6,15 +6,22 @@ const express = require("express")
 const path = require("path")
 const cors = require("cors")
 const helmet = require("helmet")
-
+const mongoose = require("mongoose")
 ////////////////////////////////////////////////
 const keys = require("./config/keys")
 const routes = require("./routes")
 const socket = require("./socket")
-const connectDB = require("./config/db")
 ///////////////////////////////////////////////////////////////////
 //connect to mongoDB
-connectDB()
+mongoose
+  .connect(keys.database.url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() =>
+    console.log(`${chalk.green("✓")} ${chalk.blue("MongoDB Connected!")}`)
+  )
+  .catch(err => console.log(`${chalk.red("✗")} MongoDB connection error:`, err))
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
 const app = express()
