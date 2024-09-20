@@ -1,4 +1,7 @@
+const chalk = require("chalk")
 const mongoose = require("mongoose")
+const keys = require("./keys")
+
 const connectDB = async () => {
   try {
     await mongoose.connect(keys.database.url, {

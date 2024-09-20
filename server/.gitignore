@@ -1,18 +1,46 @@
 # dependencies
 node_modules
-
-# # production
-# build
-# dist
-  
-# # misc
-# package.json.bak
-# .DS_Store
-
 # config file
 .env
+.env.local
+.env.development
+.env.development.local
+.env.production
+.env.production.local
+.env.test
+.env.test.local
 
-# # debug
-# npm-debug.log*
-# yarn-debug.log*
-# yarn-error.log* 
+# Seed data (if applicable)
+# /config/seed.js
+
+
+# Uploaded files (if applicable)
+/uploads
+# Temporary files
+/tmp
+# Coverage directory used by tools like istanbul
+/coverage
+# Logs
+/logs
+*.log
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# IDE files
+.vscode
+.idea
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+

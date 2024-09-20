@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Black Ecommerce Server",
+  "description": "Black Store Server",
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",

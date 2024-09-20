@@ -1,4 +1,4 @@
-// export const API_URL = "https://black-ecommerce-api.vercel.app/api"
+// export const API_URL = "https://blackstore.vercel.app/api"
 export const API_URL = window.location.origin + "/api"
 
 export const SOCKET_URL =
