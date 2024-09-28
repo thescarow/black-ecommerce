@@ -17,10 +17,9 @@ module.exports = {
     key: process.env.MAILCHIMP_KEY,
     listKey: process.env.MAILCHIMP_LIST_KEY
   },
-  mailgun: {
-    key: process.env.MAILGUN_KEY,
-    domain: process.env.MAILGUN_DOMAIN,
-    sender: process.env.MAILGUN_EMAIL_SENDER
+  mail: {
+    key: process.env.MAIL_KEY,
+    sender: process.env.MAIL_EMAIL_SENDER
   },
   google: {
     clientID: process.env.GOOGLE_CLIENT_ID,
